@@ -1,35 +1,32 @@
 {
   "name": "react-native-rotation-detector",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Detect real device rotation angles (0°, 90°, 180°, 270°) in React Native with lightweight native code for iOS and Android.",
-  "main": "./lib/module/index.js",
-  "types": "./lib/typescript/src/index.d.ts",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index.tsx",
   "exports": {
     ".": {
       "source": "./src/index.tsx",
       "types": "./lib/typescript/src/index.d.ts",
+      "require": "./lib/commonjs/index.js",
+      "import": "./lib/module/index.js",
+      "react-native": "./src/index.tsx",
       "default": "./lib/module/index.js"
     },
     "./package.json": "./package.json"
   },
   "files": [
-    "src",
-    "lib",
-    "android",
-    "ios",
-    "cpp",
-    "*.podspec",
-    "react-native.config.js",
-    "!ios/build",
-    "!android/build",
-    "!android/gradle",
-    "!android/gradlew",
-    "!android/gradlew.bat",
-    "!android/local.properties",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__",
-    "!**/.*"
+    "lib/",
+    "src/",
+    "android/",
+    "ios/",
+    "cpp/",
+    "README.md",
+    "LICENSE",
+    "package.json",
+    "*.podspec"
   ],
   "scripts": {
     "example": "yarn workspace react-native-rotation-detector-example",
@@ -43,7 +40,12 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "rotation",
+    "orientation",
+    "device-rotation",
+    "turbo-module",
+    "native-module"
   ],
   "repository": {
     "type": "git",
@@ -79,7 +81,7 @@
     "prettier": "^3.0.3",
     "react": "19.0.0",
     "react-native": "0.79.2",
-    "react-native-builder-bob": "^0.40.13",
+    "react-native-builder-bob": "^0.30.2",
     "release-it": "^17.10.0",
     "turbo": "^1.10.7",
     "typescript": "^5.8.3"
@@ -134,6 +136,12 @@
     "source": "src",
     "output": "lib",
     "targets": [
+      [
+        "commonjs",
+        {
+          "esm": true
+        }
+      ],
       [
         "module",
         {
