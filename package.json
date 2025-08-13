@@ -45,11 +45,17 @@
     "orientation",
     "device-rotation",
     "turbo-module",
-    "native-module"
+    "native-module",
+    "react-native-library",
+    "device-orientation",
+    "screen-rotation",
+    "auto-linking",
+    "typescript"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrese03/react-native-rotation-detector.git"
+    "url": "git+https://github.com/andrese03/react-native-rotation-detector.git",
+    "directory": "."
   },
   "author": "Andres Encarnacion Ortiz <andrese03@users.noreply.github.com> (https://github.com/andrese03)",
   "license": "MIT",
@@ -58,7 +64,15 @@
   },
   "homepage": "https://github.com/andrese03/react-native-rotation-detector#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/andrese03"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^19.6.0",

@@ -1,5 +1,10 @@
 # react-native-rotation-detector
 
+[![npm version](https://badge.fury.io/js/react-native-rotation-detector.svg)](https://badge.fury.io/js/react-native-rotation-detector)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-rotation-detector.svg)](https://www.npmjs.com/package/react-native-rotation-detector)
+[![GitHub license](https://img.shields.io/github/license/andrese03/react-native-rotation-detector.svg)](https://github.com/andrese03/react-native-rotation-detector/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/andrese03/react-native-rotation-detector.svg?style=social&label=Star)](https://github.com/andrese03/react-native-rotation-detector)
+
 Detect real device rotation angles (0°, 90°, 180°, 270°) in React Native with lightweight native code for iOS and Android.
 
 ## Minimum Requirements
@@ -27,10 +32,17 @@ Detect real device rotation angles (0°, 90°, 180°, 270°) in React Native wit
 ## Installation
 
 ```sh
+# Using npm
 npm install react-native-rotation-detector
-# or
+
+# Using yarn
 yarn add react-native-rotation-detector
+
+# Using pnpm
+pnpm add react-native-rotation-detector
 ```
+
+> **📦 Available on NPM:** [react-native-rotation-detector](https://www.npmjs.com/package/react-native-rotation-detector)
 
 ### Auto-linking (React Native 0.60+)
 
@@ -171,6 +183,13 @@ export type RotationLabel =
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+
+## Support
+
+- ⭐ **Star this repository** if you find it useful
+- 🐛 **Report issues** on [GitHub Issues](https://github.com/andrese03/react-native-rotation-detector/issues)
+- 💬 **Ask questions** in [GitHub Discussions](https://github.com/andrese03/react-native-rotation-detector/discussions)
+- 📦 **View on NPM**: [react-native-rotation-detector](https://www.npmjs.com/package/react-native-rotation-detector)
 
 ## License
 
