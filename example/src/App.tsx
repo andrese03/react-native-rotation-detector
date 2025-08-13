@@ -1,167 +1,79 @@
-import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
-import { useRotation, multiply } from 'react-native-rotation-detector';
+import { Text, View, StyleSheet } from 'react-native';
+import { useRotation } from '../../src';
 
 /**
- * Example app demonstrating the useRotation hook
- *
- * Shows real-time rotation angle and orientation label
- * as the device is rotated between different orientations.
+ * Clean example app showing all rotation hook values
  */
 export default function App() {
-  // Get current rotation state using the custom hook
-  const { angle, label } = useRotation();
-
-  // Legacy multiply function test
-  const mathResult = multiply(3, 7);
-
-  // Get rotation indicator based on current angle
-  const getRotationIndicator = () => {
-    switch (angle) {
-      case 0:
-        return '📱'; // Portrait
-      case 90:
-        return '📱'; // Landscape-left (rotated counter-clockwise)
-      case 180:
-        return '🙃'; // Portrait-upside-down
-      case 270:
-        return '📱'; // Landscape-right (rotated clockwise)
-      default:
-        return '📱';
-    }
-  };
+  // Get all values from the rotation hook
+  const rotationData = useRotation();
+  const { angle, label } = rotationData;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>🔄 Rotation Detector</Text>
+        <Text style={styles.title}>Current Orientation</Text>
+        <Text style={styles.orientation}>{label}</Text>
 
-        <View style={styles.rotationInfo}>
-          <Text style={styles.indicator}>{getRotationIndicator()}</Text>
+        <Text style={styles.subtitle}>Angle</Text>
+        <Text style={styles.angle}>{angle}°</Text>
 
-          <View style={styles.infoCard}>
-            <Text style={styles.label}>Current Rotation</Text>
-            <Text style={styles.angle}>{angle}°</Text>
-          </View>
-
-          <View style={styles.infoCard}>
-            <Text style={styles.label}>Orientation</Text>
-            <Text style={styles.orientationLabel}>{label}</Text>
-          </View>
-        </View>
-
-        <View style={styles.instructions}>
-          <Text style={styles.instructionTitle}>Instructions:</Text>
-          <Text style={styles.instructionText}>
-            • Rotate your device to see live angle updates
-          </Text>
-          <Text style={styles.instructionText}>
-            • Works in all 4 orientations (0°, 90°, 180°, 270°)
-          </Text>
-          <Text style={styles.instructionText}>
-            • Detects landscape-left vs landscape-right
-          </Text>
-        </View>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Math test: 3 × 7 = {mathResult}</Text>
-        </View>
+        <Text style={styles.subtitle}>All Hook Values</Text>
+        <Text style={styles.hookData}>
+          {JSON.stringify(rotationData, null, 2)}
+        </Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#ffffff',
   },
   content: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 40,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 40,
+    color: '#333333',
+    marginBottom: 16,
     textAlign: 'center',
   },
-  rotationInfo: {
-    alignItems: 'center',
-    marginBottom: 40,
-  },
-  indicator: {
-    fontSize: 60,
-    marginBottom: 20,
-  },
-  infoCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginVertical: 8,
-    minWidth: 200,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  label: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
-    textTransform: 'uppercase',
+  orientation: {
+    fontSize: 32,
     fontWeight: '600',
+    color: '#007AFF',
+    marginBottom: 32,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#666666',
+    marginBottom: 8,
+    textAlign: 'center',
   },
   angle: {
-    fontSize: 32,
+    fontSize: 48,
     fontWeight: 'bold',
-    color: '#007AFF',
-  },
-  orientationLabel: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
+    color: '#FF6B35',
+    marginBottom: 32,
     textAlign: 'center',
   },
-  instructions: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginVertical: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  instructionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 12,
-  },
-  instructionText: {
+  hookData: {
     fontSize: 14,
-    color: '#666',
-    marginBottom: 6,
-    lineHeight: 20,
-  },
-  footer: {
-    marginTop: 20,
-  },
-  footerText: {
-    fontSize: 12,
-    color: '#999',
-    textAlign: 'center',
+    fontFamily: 'monospace',
+    color: '#333333',
+    backgroundColor: '#f8f8f8',
+    padding: 16,
+    borderRadius: 8,
+    textAlign: 'left',
+    maxWidth: '100%',
   },
 });

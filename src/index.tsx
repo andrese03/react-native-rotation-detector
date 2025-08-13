@@ -158,8 +158,3 @@ export function useRotation(): UseRotationResult {
     label: angleToLabel(angle),
   };
 }
-
-// Legacy export for backward compatibility
-export function multiply(a: number, b: number): number {
-  return RotationDetector.multiply(a, b);
-}

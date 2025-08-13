@@ -10302,8 +10302,19 @@ __metadata:
     react-native: 0.79.2
     react-native-builder-bob: ^0.40.13
     react-native-monorepo-config: ^0.1.9
+    react-native-rotation-detector: "file:../"
   languageName: unknown
   linkType: soft
+
+"react-native-rotation-detector@file:../::locator=react-native-rotation-detector-example%40workspace%3Aexample":
+  version: 0.1.0
+  resolution: "react-native-rotation-detector@file:../#../::hash=e6de50&locator=react-native-rotation-detector-example%40workspace%3Aexample"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 41d8cb4c5268054aae2824971258af651b8dfa21894a2fa32aa8353a720408f40e53d9315fa890e37f02a717e5f3f6f08265f481e34a2b94ef072c1ea4922af2
+  languageName: node
+  linkType: hard
 
 "react-native-rotation-detector@workspace:.":
   version: 0.0.0-use.local

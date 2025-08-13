@@ -81,11 +81,6 @@ class RotationDetectorModule(reactContext: ReactApplicationContext) :
       .emit(eventName, params)
   }
 
-  // Example method - keeping for backward compatibility
-  override fun multiply(a: Double, b: Double): Double {
-    return a * b
-  }
-
   companion object {
     const val NAME = "RotationDetector"
   }

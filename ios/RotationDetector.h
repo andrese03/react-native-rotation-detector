@@ -10,7 +10,7 @@
 
 /**
  * Swift RotationDetector module interface
- * 
+ *
  * This header provides the Objective-C interface for the Swift implementation
  * of the RotationDetector turbo module, enabling cross-platform rotation detection.
  */
