@@ -2,7 +2,6 @@
 
 [![npm version](https://badge.fury.io/js/react-native-rotation-detector.svg)](https://badge.fury.io/js/react-native-rotation-detector)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-rotation-detector.svg)](https://www.npmjs.com/package/react-native-rotation-detector)
-[![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-native-rotation-detector)](https://bundlephobia.com/package/react-native-rotation-detector)
 [![GitHub license](https://img.shields.io/github/license/andrese03/react-native-rotation-detector.svg)](https://github.com/andrese03/react-native-rotation-detector/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/andrese03/react-native-rotation-detector.svg?style=social&label=Star)](https://github.com/andrese03/react-native-rotation-detector)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/andrese03?style=social)](https://github.com/sponsors/andrese03)
@@ -15,9 +14,10 @@ Detect real device rotation angles (0°, 90°, 180°, 270°) in React Native wit
 - **⚡ Lightweight**: Zero dependencies, minimal bundle size
 - **🔗 Auto-linking**: Works out of the box with React Native 0.60+
 - **🏗️ TurboModule**: Modern architecture for better performance
-- **📱 Cross-platform**: iOS and Android support
+- **📱 Cross-platform**: iOS and Android support with platform-optimized implementations
 - **🔧 TypeScript**: Full type definitions included
-- **🎣 React Hook**: Simple `useRotation()` hook interface
+- **🎣 React Hooks**: `useRotation()` for immediate updates, `useRotationComplete()` for Android completion detection
+- **🔄 Complete Transitions**: Supports landscape-left ↔ landscape-right transitions on Android
 
 ## 📦 Package Stats
 
@@ -153,7 +153,23 @@ protected List<ReactPackage> getPackages() {
 
 ## Usage
 
-### Basic Usage
+### Available Hooks
+
+This package provides two React hooks with different behaviors optimized for each platform:
+
+#### `useRotation()` - Cross-platform immediate updates
+
+- **iOS**: Provides immediate rotation updates using native orientation change events
+- **Android**: Provides immediate rotation updates using sensor data
+- **Use case**: Real-time rotation tracking, UI adjustments during rotation
+
+#### `useRotationComplete()` - Android-only completion detection
+
+- **Android**: Waits for rotation animation to complete before updating state
+- **iOS**: Not available (iOS handles rotation completion natively)
+- **Use case**: Triggering actions after rotation finishes, avoiding mid-rotation glitches
+
+### Basic Usage - Immediate Updates
 
 ```js
 import { useRotation } from 'react-native-rotation-detector';
@@ -161,6 +177,36 @@ import { useRotation } from 'react-native-rotation-detector';
 function MyComponent() {
   const { angle, label } = useRotation();
 
+  return (
+    <View>
+      <Text>Current rotation: {angle}°</Text>
+      <Text>Orientation: {label}</Text>
+    </View>
+  );
+}
+```
+
+### Android-Only: Rotation Completion Detection
+
+```js
+import { useRotationComplete } from 'react-native-rotation-detector';
+import { Platform } from 'react-native';
+
+function MyComponent() {
+  if (Platform.OS === 'android') {
+    const { angle, label, isRotating } = useRotationComplete();
+
+    return (
+      <View>
+        <Text>Final rotation: {angle}°</Text>
+        <Text>Orientation: {label}</Text>
+        <Text>Status: {isRotating ? 'Rotating...' : 'Stable'}</Text>
+      </View>
+    );
+  }
+
+  // For iOS, use regular useRotation
+  const { angle, label } = useRotation();
   return (
     <View>
       <Text>Current rotation: {angle}°</Text>
@@ -183,14 +229,37 @@ The `useRotation` hook returns an object with:
 
 ### Platform Differences
 
-- **iOS**: Uses `DeviceEventEmitter` to listen for orientation changes via `UIDevice` notifications
-- **Android**: Uses native `OrientationEventListener` for precise rotation tracking with raw degree bucketing
+#### iOS Implementation
+
+- **`useRotation()`**: Uses `DeviceEventEmitter` to listen for orientation changes via `UIDevice` notifications
+- **`useRotationComplete()`**: Not available - iOS handles rotation completion natively through the system UI
+- **Behavior**: iOS provides smooth, system-managed rotation animations with automatic completion handling
+
+#### Android Implementation
+
+- **`useRotation()`**: Uses native `OrientationEventListener` for precise rotation tracking with raw degree bucketing
+- **`useRotationComplete()`**: Uses configuration change broadcasts and sensor data to detect rotation completion
+- **Behavior**: Android uses sensor data which requires explicit completion detection for optimal UX
+- **Transition Support**: Handles all rotation transitions including landscape-left ↔ landscape-right (180° sensor transitions)
+
+#### Why Android-Only `useRotationComplete()`?
+
+On **iOS**, the system automatically manages rotation animations and provides completion callbacks through the native UI system. The rotation events you receive are already "complete" in the sense that they represent the final orientation state.
+
+On **Android**, rotation detection relies on raw sensor data (accelerometer/magnetometer). The device continuously reports rotation angles as the user rotates it, which means you get intermediate values during the rotation animation. `useRotationComplete()` solves this by waiting for the rotation to stabilize before updating your UI state.
+
+**Use Cases:**
+
+- **`useRotation()`**: Live rotation feedback, real-time UI adjustments
+- **`useRotationComplete()` (Android)**: Post-rotation actions, avoiding layout shifts during rotation
 
 ## API Reference
 
 ### `useRotation(): UseRotationResult`
 
-React hook that returns the current device rotation state.
+React hook that returns the current device rotation state with immediate updates.
+
+**Platform Support:** iOS and Android
 
 **Returns:**
 
@@ -201,18 +270,67 @@ interface UseRotationResult {
 }
 ```
 
+### `useRotationComplete(): UseRotationCompleteResult`
+
+React hook that waits for rotation animation completion before updating state.
+
+**Platform Support:** Android only (logs error in development mode on other platforms)
+
+**Returns:**
+
+```typescript
+interface UseRotationCompleteResult {
+  angle: RotationDeg;    // 0 | 90 | 180 | 270
+  label: RotationLabel;  // 'portrait' | 'landscape-left' | 'portrait-upside-down' | 'landscape-right'
+  isRotating: boolean;   // true during rotation animation, false when stable
+}
+```
+
 ### Types
 
 ```typescript
 export type RotationDeg = 0 | 90 | 180 | 270;
 export type RotationLabel =
-  | 'portrait'
-  | 'portrait-upside-down'
-  | 'landscape-left'
-  | 'landscape-right';
+  | 'portrait'           // 0°
+  | 'portrait-upside-down'  // 180°
+  | 'landscape-left'     // 90°
+  | 'landscape-right';   // 270°
 ```
 
 ## Troubleshooting
+
+### Import Issues
+
+**Problem**: Module resolution errors like `node_modules/react-native-rotation-detector/lib/typescript/src/useRotationComplete could not be found`
+
+**Solution**: Always import from the package root, not internal paths:
+
+```typescript
+// ✅ Correct
+import { useRotation, useRotationComplete } from 'react-native-rotation-detector';
+
+// ❌ Wrong - don't import from internal paths
+import { useRotationComplete } from 'node_modules/react-native-rotation-detector/lib/typescript/src/useRotationComplete';
+```
+
+**Problem**: `useRotationComplete` is not available on iOS
+
+**Solution**: Use platform checks when using `useRotationComplete`:
+
+```typescript
+import { Platform } from 'react-native';
+import { useRotation, useRotationComplete } from 'react-native-rotation-detector';
+
+function MyComponent() {
+  if (Platform.OS === 'android') {
+    const { angle, label, isRotating } = useRotationComplete();
+    // Android-specific logic
+  } else {
+    const { angle, label } = useRotation();
+    // iOS and other platforms
+  }
+}
+```
 
 ### iOS Issues
 
@@ -225,11 +343,13 @@ export type RotationLabel =
 - **Build errors**: Ensure your `minSdkVersion` is 21 or higher
 - **Auto-linking not working**: Try running `npx react-native unlink react-native-rotation-detector` then `npx react-native link react-native-rotation-detector`
 - **Kotlin compilation errors**: Ensure Kotlin 1.7.0+ is configured in your project
+- **Rotation completion not working**: Ensure your app handles configuration changes properly in `AndroidManifest.xml`
 
 ### General Issues
 
 - **Hook not updating**: Ensure your React Native version supports TurboModules (0.68+)
 - **Events not firing**: Check that your app has the necessary orientation permissions enabled
+- **Package version mismatch**: Clear node_modules and reinstall: `rm -rf node_modules package-lock.json && npm install`
 
 ## 📋 Versioning & Releases
 
