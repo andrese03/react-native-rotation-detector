@@ -156,6 +156,28 @@ class RotationDetector: RCTEventEmitter {
   }
 
   /**
+   * Starts rotation completion listener - NOT IMPLEMENTED ON iOS
+   *
+   * This is a no-op on iOS as useRotationComplete is Android-only
+   */
+  @objc
+  func startRotationCompletionListener() {
+    // No-op: useRotationComplete is Android-only
+    // iOS apps should use the regular rotation detection methods
+  }
+
+  /**
+   * Stops rotation completion listener - NOT IMPLEMENTED ON iOS
+   *
+   * This is a no-op on iOS as useRotationComplete is Android-only
+   */
+  @objc
+  func stopRotationCompletionListener() {
+    // No-op: useRotationComplete is Android-only
+    // iOS apps should use the regular rotation detection methods
+  }
+
+  /**
    * Gets the current device rotation angle in degrees (asynchronous version)
    *
    * - Parameters:

@@ -15,6 +15,10 @@ export interface UseRotationResult {
   label: RotationLabel;
 }
 
+// Export the rotation completion hook
+export { useRotationComplete } from './useRotationComplete';
+export type { UseRotationCompleteResult } from './useRotationComplete';
+
 /**
  * Maps rotation angle to human-readable label
  * @param angle - The rotation angle in degrees (0, 90, 180, 270)
@@ -98,12 +102,22 @@ export function useRotation(): UseRotationResult {
       subscription = DeviceEventEmitter.addListener(
         'namedOrientationDidChange',
         (data: any) => {
+          console.log('iOS orientation event received:', data);
           if (data && data.name) {
             const newAngle = iOSOrientationToAngle(data.name);
+            console.log('Setting new angle:', newAngle);
             setAngle(newAngle);
           }
         }
       );
+
+      // Explicitly start the listener for iOS too
+      try {
+        RotationDetector.startRotationListener();
+        console.log('iOS rotation listener started');
+      } catch (error) {
+        console.warn('Failed to start iOS rotation listener:', error);
+      }
     } else if (Platform.OS === 'android') {
       // Android: Listen for rotation changes from native module
       subscription = DeviceEventEmitter.addListener(
@@ -127,6 +141,7 @@ export function useRotation(): UseRotationResult {
     // Get initial rotation
     try {
       const currentRotation = RotationDetector.getCurrentRotation();
+      console.log('Initial rotation:', currentRotation);
       if (Platform.OS === 'android') {
         setAngle(bucketAndroidRotation(currentRotation));
       } else {
@@ -143,12 +158,10 @@ export function useRotation(): UseRotationResult {
         subscription.remove();
       }
 
-      if (Platform.OS === 'android') {
-        try {
-          RotationDetector.stopRotationListener();
-        } catch (error) {
-          console.warn('Failed to stop rotation listener:', error);
-        }
+      try {
+        RotationDetector.stopRotationListener();
+      } catch (error) {
+        console.warn('Failed to stop rotation listener:', error);
       }
     };
   }, []);

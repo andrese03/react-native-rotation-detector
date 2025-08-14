@@ -6,6 +6,10 @@ export interface Spec extends TurboModule {
   startRotationListener(): void;
   // Stop rotation event listener
   stopRotationListener(): void;
+  // Start rotation completion listener
+  startRotationCompletionListener(): void;
+  // Stop rotation completion listener
+  stopRotationCompletionListener(): void;
   // Get current rotation angle
   getCurrentRotation(): number;
 }
