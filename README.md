@@ -351,6 +351,62 @@ function MyComponent() {
 - **Events not firing**: Check that your app has the necessary orientation permissions enabled
 - **Package version mismatch**: Clear node_modules and reinstall: `rm -rf node_modules package-lock.json && npm install`
 
+## Testing
+
+This package includes Jest mocks to make testing your components easy. The mocks allow you to simulate rotation changes and test your component's behavior.
+
+### Quick Setup
+
+Create a `__mocks__` directory in your project root and copy the mock file:
+
+**For JavaScript projects:**
+
+```bash
+mkdir -p __mocks__
+cp node_modules/react-native-rotation-detector/jest/mock.js __mocks__/react-native-rotation-detector.js
+```
+
+**For TypeScript projects:**
+
+```bash
+mkdir -p __mocks__
+cp node_modules/react-native-rotation-detector/jest/mock.ts __mocks__/react-native-rotation-detector.ts
+```
+
+### Usage in Tests
+
+```javascript
+import { __mockHelpers } from 'react-native-rotation-detector';
+
+describe('MyComponent', () => {
+  beforeEach(() => {
+    __mockHelpers.reset(); // Reset to portrait orientation
+  });
+
+  it('responds to rotation changes', () => {
+    const { getByTestId, rerender } = render(<MyComponent />);
+
+    // Simulate rotation to landscape
+    __mockHelpers.setRotation(90);
+    rerender(<MyComponent />);
+
+    expect(getByTestId('orientation')).toHaveTextContent('landscape-left');
+  });
+
+  it('handles Android rotation completion', () => {
+    // Start rotation
+    __mockHelpers.setRotation(90, true); // isRotating = true
+    rerender(<MyComponent />);
+
+    // Complete rotation
+    __mockHelpers.completeRotation(); // isRotating = false
+    rerender(<MyComponent />);
+  });
+});
+```
+
+**📁 Complete documentation**: See [`jest/README.md`](jest/README.md) for detailed testing setup and examples.
+
 ## 📋 Versioning & Releases
 
 This project follows [Semantic Versioning (SemVer)](https://semver.org/):

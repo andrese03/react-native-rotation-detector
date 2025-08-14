@@ -23,6 +23,7 @@
     "android/",
     "ios/",
     "cpp/",
+    "jest/",
     "README.md",
     "LICENSE",
     "package.json",
