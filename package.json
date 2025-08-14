@@ -1,6 +1,6 @@
 {
   "name": "react-native-rotation-detector",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Detect real device rotation angles (0°, 90°, 180°, 270°) in React Native with lightweight native code for iOS and Android.",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
